@@ -30,4 +30,10 @@ public class Building {
     public Building(int num) {
         this.number = num;
     }
+
+    @Override
+    public String toString() {
+        return "\n\tНомер: " + number +
+                "\n\tКвартиры : " + aparts;
+    }
 }

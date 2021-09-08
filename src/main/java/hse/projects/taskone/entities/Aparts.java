@@ -30,4 +30,10 @@ public class Aparts {
     public Person get(int index) {
         return this.residents.get(index);
     }
+
+    @Override
+    public String toString() {
+        return "\n\t\tНомер: " + number +
+                "\n\t\tЖители: " + residents;
+    }
 }

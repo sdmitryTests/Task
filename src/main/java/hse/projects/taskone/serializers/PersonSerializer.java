@@ -24,23 +24,15 @@ public class PersonSerializer implements Serializer<Person> {
     }
 
     @Override
-    public Person fromJson(String str) {
-        AnimalSerializer as = new AnimalSerializer();
-        StringBuilder sb = new StringBuilder(str);
-        sb.delete(0, sb.indexOf(":") + 2); // обрезаем до первого значения (firstName)
-        String firstName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до второго значения (lastName)
-        String lastName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до третьего значения (money)
-        int money = Integer.parseInt(sb.substring(0, sb.indexOf(","))); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до списка питомцев
-        List<Animal> animalList = new ArrayList<>();
-        Person tmpPers = new Person(firstName, lastName, money);
-        while (sb.indexOf(":") >= 0){
-            animalList.add(as.fromJson(sb.toString())); // сериализуем всех питомцев и добавляем в массив
-            sb.delete(0, sb.indexOf("}") + 1);
+    public String toJsonList(List<Person> lstObj) {
+        StringBuilder val = new StringBuilder("[");
+        for (Person person : lstObj) {
+            val.append(this.toJson(person));
+            val.append(",");
         }
-        tmpPers.setPets(animalList);
-        return tmpPers;
+        val.deleteCharAt(val.length()-1);
+        val.append("]");
+        return val.toString();
     }
+
 }

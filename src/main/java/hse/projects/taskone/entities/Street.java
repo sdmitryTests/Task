@@ -26,4 +26,9 @@ public class Street {
         this.buildings.add(b);
     }
 
+    @Override
+    public String toString() {
+        return "\nНазвание: " + streetName +
+                "\nДома: " + buildings;
+    }
 }

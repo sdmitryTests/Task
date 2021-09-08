@@ -23,19 +23,15 @@ public class ApartSerializer implements Serializer<Aparts> {
     }
 
     @Override
-    public Aparts fromJson(String str) {
-        PersonSerializer ps = new PersonSerializer();
-        StringBuilder sb = new StringBuilder(str);
-        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до первого значения (number)
-        int number = Integer.parseInt(sb.substring(0, sb.indexOf(","))); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до списка жителей
-        List<Person> residentList = new ArrayList<>();
-        Aparts tmpA = new Aparts(number);
-        while (sb.indexOf(":") >= 0){
-            residentList.add(ps.fromJson(sb.toString())); // сериализуем всех питомцев и добавляем в массив
-            sb.delete(0, sb.indexOf("}") + 1);
+    public String toJsonList(List<Aparts> lstObj) {
+        StringBuilder val = new StringBuilder("[");
+        for (Aparts apart : lstObj) {
+            val.append(this.toJson(apart));
+            val.append(",");
         }
-        tmpA.setResidents(residentList);
-        return tmpA;
+        val.deleteCharAt(val.length()-1);
+        val.append("]");
+        return val.toString();
     }
+
 }

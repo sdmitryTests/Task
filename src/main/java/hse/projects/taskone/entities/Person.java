@@ -50,4 +50,12 @@ public class Person {
     public void addPet(Animal pet) {
         this.pets.add(pet);
     }
+
+    @Override
+    public String toString() {
+        return "\n\t\t\tИмя: " + firstName +
+                "\n\t\t\tФамилия: " + lastName +
+                "\n\t\t\tКапитал: " + money +
+                "\n\t\t\tПитомцы: " + pets;
+    }
 }

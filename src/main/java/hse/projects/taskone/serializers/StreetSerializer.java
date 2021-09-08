@@ -1,6 +1,7 @@
 package hse.projects.taskone.serializers;
 
 import hse.projects.taskone.entities.Building;
+import hse.projects.taskone.entities.Person;
 import hse.projects.taskone.entities.Street;
 
 import java.util.ArrayList;
@@ -23,19 +24,14 @@ public class StreetSerializer implements Serializer<Street> {
     }
 
     @Override
-    public Street fromJson(String str) {
-        BuildingSerializer bs = new BuildingSerializer();
-        StringBuilder sb = new StringBuilder(str);
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до первого значения (streetName)
-        String streetName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до списка домов
-        List<Building> buildingList = new ArrayList<>();
-        Street tmpS = new Street(streetName);
-        while (sb.indexOf(":") >= 0){
-            buildingList.add(bs.fromJson(sb.toString())); // сериализуем всех питомцев и добавляем в массив
-            sb.delete(0, sb.indexOf("}") + 1);
+    public String toJsonList(List<Street> lstObj) {
+        StringBuilder val = new StringBuilder("[");
+        for (Street street : lstObj) {
+            val.append(this.toJson(street));
+            val.append(",");
         }
-        tmpS.setBuildings(buildingList);
-        return tmpS;
+        val.deleteCharAt(val.length()-1);
+        val.append("]");
+        return val.toString();
     }
 }
