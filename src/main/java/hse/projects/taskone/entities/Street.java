@@ -28,7 +28,7 @@ public class Street {
 
     @Override
     public String toString() {
-        return "\nНазвание: " + streetName +
+        return "\nУлица " + streetName +
                 "\nДома: " + buildings;
     }
 }

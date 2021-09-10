@@ -7,26 +7,27 @@ import hse.projects.taskone.serializers.BuildingSerializer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StreetDeserializer implements Deserializer<Street> {
+public class StreetDeserializer extends Separator implements Deserializer<Street> {
     @Override
     public Street fromJson(String str) {
         BuildingDeserializer bd = new BuildingDeserializer();
         StringBuilder sb = new StringBuilder(str);
         sb.delete(0, sb.indexOf(":") + 2); //обрезаем до первого значения (streetName)
         String streetName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до списка домов
-        List<Building> buildingList = new ArrayList<>();
+        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка домов
         Street tmpS = new Street(streetName);
-        while (sb.indexOf(":") >= 0){
-            buildingList.add(bd.fromJson(sb.toString())); // сериализуем всех питомцев и добавляем в массив
-            sb.delete(0, sb.indexOf("}") + 1);
-        }
-        tmpS.setBuildings(buildingList);
+        tmpS.setBuildings(bd.fromJsonList(sb.toString()));
         return tmpS;
     }
 
     @Override
     public List<Street> fromJsonList(String str) {
-        return null;
+        List<Street> streetsList = new ArrayList<>();
+        List<String> strLst = this.toStringList(str);
+        for (String string : strLst) {
+            streetsList.add(this.fromJson(string));
+        }
+        return streetsList;
     }
+
 }

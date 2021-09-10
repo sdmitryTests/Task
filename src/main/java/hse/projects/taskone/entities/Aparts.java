@@ -33,7 +33,7 @@ public class Aparts {
 
     @Override
     public String toString() {
-        return "\n\t\tНомер: " + number +
+        return "\n\t\tКвартира " + number +
                 "\n\t\tЖители: " + residents;
     }
 }

@@ -33,7 +33,7 @@ public class Building {
 
     @Override
     public String toString() {
-        return "\n\tНомер: " + number +
+        return "\n\tДом " + number +
                 "\n\tКвартиры : " + aparts;
     }
 }

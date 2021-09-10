@@ -7,7 +7,7 @@ import hse.projects.taskone.serializers.AnimalSerializer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonDeserializer implements Deserializer<Person> {
+public class PersonDeserializer extends Separator implements Deserializer<Person> {
     @Override
     public Person fromJson(String str) {
         AnimalDeserializer ad = new AnimalDeserializer();
@@ -17,20 +17,20 @@ public class PersonDeserializer implements Deserializer<Person> {
         sb.delete(0, sb.indexOf(":") + 2); //обрезаем до второго значения (lastName)
         String lastName = sb.substring(0, sb.indexOf("\"")); // записываем значение
         sb.delete(0, sb.indexOf(":") + 1); //обрезаем до третьего значения (money)
-        int money = Integer.parseInt(sb.substring(0, sb.indexOf(","))); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до списка питомцев
-        List<Animal> animalList = new ArrayList<>();
+        int money = Integer.parseInt(sb.substring(0, sb.indexOf("p") - 2)); // записываем значение
+        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка питомцев
         Person tmpPers = new Person(firstName, lastName, money);
-        while (sb.indexOf(":") >= 0){
-            animalList.add(ad.fromJson(sb.toString())); // сериализуем всех питомцев и добавляем в массив
-            sb.delete(0, sb.indexOf("}") + 1);
-        }
-        tmpPers.setPets(animalList);
+        tmpPers.setPets(ad.fromJsonList(sb.toString()));
         return tmpPers;
     }
 
     @Override
     public List<Person> fromJsonList(String str) {
-        return null;
+        List<Person> personList = new ArrayList<>();
+        List<String> strLst = this.toStringList(str);
+        for (String string : strLst) {
+            personList.add(this.fromJson(string));
+        }
+        return personList;
     }
 }
