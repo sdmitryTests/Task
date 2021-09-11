@@ -38,8 +38,8 @@ public class Main {
         StreetDeserializer sd = new StreetDeserializer();
         p.addPet(an1);
         p.addPet(an2);
-        p2.addPet(anp);
-        p3.addPet(an3);
+        p.addPet(anp);
+        p.addPet(an3);
         a.addResident(p2);
         a.addResident(p);
         a2.addResident(p3);
@@ -51,6 +51,12 @@ public class Main {
         s.AddBuilding(b2);
         /*                                 */
         String str = ss.toJson(s);
-        System.out.println(sd.fromJson(str));
+
+        String serializedPerson = ps.toJson(p);
+        System.out.println(serializedPerson);
+        Person deserializedPerson = pd.fromJson(serializedPerson);
+        System.out.println(deserializedPerson);
+
+//        System.out.println(sd.fromJson(str));
     }
 }

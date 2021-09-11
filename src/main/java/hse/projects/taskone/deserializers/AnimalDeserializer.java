@@ -2,10 +2,10 @@ package hse.projects.taskone.deserializers;
 
 import hse.projects.taskone.entities.Animal;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class AnimalDeserializer extends Separator implements Deserializer<Animal> {
+public class AnimalDeserializer extends JsonArraySplitter implements Deserializer<Animal> {
     @Override
     public Animal fromJson(String str) {
         StringBuilder sb = new StringBuilder(str);
@@ -17,13 +17,11 @@ public class AnimalDeserializer extends Separator implements Deserializer<Animal
     }
 
     @Override
-    public List<Animal> fromJsonList(String str) {
-        List<Animal> animalList = new ArrayList<>();
-        List<String> strLst = this.toStringList(str);
-        for (String string : strLst) {
-            animalList.add(this.fromJson(string));
-        }
-        return animalList;
+    public List<Animal> fromJsonList(String animalJsonArray) {
+        JsonArraySplitter jsonArraySplitter = new JsonArraySplitter(animalJsonArray);
+        List<String> splittedJsonArray = jsonArraySplitter.splitJsonArray();
+        List<Animal> animals = splittedJsonArray.stream().map(this::fromJson).collect(Collectors.toList());
+        return animals;
     }
 
 }

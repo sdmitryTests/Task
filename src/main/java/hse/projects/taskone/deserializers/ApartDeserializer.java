@@ -1,13 +1,11 @@
 package hse.projects.taskone.deserializers;
 
 import hse.projects.taskone.entities.Aparts;
-import hse.projects.taskone.entities.Person;
-import hse.projects.taskone.serializers.PersonSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApartDeserializer extends Separator implements Deserializer<Aparts> {
+public class ApartDeserializer extends JsonArraySplitter implements Deserializer<Aparts> {
     @Override
     public Aparts fromJson(String str) {
         PersonDeserializer pd = new PersonDeserializer();

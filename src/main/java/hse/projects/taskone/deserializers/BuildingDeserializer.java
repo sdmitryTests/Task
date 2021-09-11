@@ -1,13 +1,11 @@
 package hse.projects.taskone.deserializers;
 
-import hse.projects.taskone.entities.Aparts;
 import hse.projects.taskone.entities.Building;
-import hse.projects.taskone.serializers.ApartSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuildingDeserializer extends Separator implements Deserializer<Building> {
+public class BuildingDeserializer extends JsonArraySplitter implements Deserializer<Building> {
     @Override
     public Building fromJson(String str) {
         ApartDeserializer ad = new ApartDeserializer();

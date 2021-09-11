@@ -3,25 +3,41 @@ package hse.projects.taskone.deserializers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Separator {
+public class JsonArraySplitter {
     private String jsonArray;
     private int nestingLevel;
     private int currentIndex;
+    private List<String> strLst;
 
-    public Separator(String jsonArray) {
+    public JsonArraySplitter(String jsonArray) {
         this.jsonArray = jsonArray;
         this.nestingLevel = 0;
         this.currentIndex = 0;
+        this.strLst = new ArrayList<>();
     }
 
-    public Separator() {
+    public JsonArraySplitter() {
     }
 
-    public static void main(String[] args) {
-        String jsonArray = "[{\"name\":\"andrey\",\"age\":\"20\"},{\"name\":\"dora\",\"age\":\"21\"}]";
-        Separator separator = new Separator(jsonArray);
-        System.out.println(separator.splitJsonArray());
+
+    public List<String> splitJsonArray() {
+        if (!verifyJsonArray()) {
+            throw new IllegalStateException("Bad format: it is not json array!");
+        }
+        removeArrayBrackets();
+        for (; currentIndex < jsonArray.length(); currentIndex++) {
+            if (isBeginBracket()) {
+                nestingLevel++;
+                addJsonObjectToList();
+            } else if (isEndBracket()) {
+                throw new IllegalStateException("Unexpected end bracket at " + currentIndex);
+            } else if (!isComma()){
+                throw new IllegalStateException("Unexpected character at " + currentIndex);
+            }
+        }
+        return strLst;
     }
+
 
     private boolean verifyJsonArray() {
         return jsonArray.startsWith("[") && jsonArray.endsWith("]");
@@ -44,35 +60,14 @@ public class Separator {
         }
     }
 
-    public List<String> splitJsonArray() {
-        if (!verifyJsonArray()) {
-            throw new IllegalStateException("Bad format: it is not json array!");
-        }
-        removeArrayBrackets();
-        List<String> strLst = new ArrayList<>();
-        for (; currentIndex < jsonArray.length(); currentIndex++) {
-            if (isBeginBracket()) {
-                nestingLevel++;
-                int startObjectIndex = currentIndex++;
-                rewindObject();
-                strLst.add(jsonArray.substring(startObjectIndex, currentIndex));
-            } else if (isEndBracket()) {
-                throw new IllegalStateException("Unexpected end bracket at " + currentIndex);
-            } else if ()
-                switch (jsonArray.charAt(currentIndex)) {
-                    case '{' -> {
-
-                    }
-                    case '}' ->
-                    case ',' -> currentIndex++;
-                    default -> throw new IllegalStateException("Unexpected character at " + currentIndex);
-                }
-        }
-        return strLst;
+    private void addJsonObjectToList(){
+        int startObjectIndex = currentIndex++;
+        rewindObject();
+        strLst.add(jsonArray.substring(startObjectIndex, currentIndex));
     }
 
-    private boolean isBeginBracket() {
-        return '{' == jsonArray.charAt(currentIndex);
+    private boolean isComma() {
+        return ',' == jsonArray.charAt(currentIndex);
     }
 
     private boolean isBeginBracket() {

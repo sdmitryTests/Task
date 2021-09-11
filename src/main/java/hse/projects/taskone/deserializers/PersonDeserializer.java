@@ -1,13 +1,11 @@
 package hse.projects.taskone.deserializers;
 
-import hse.projects.taskone.entities.Animal;
 import hse.projects.taskone.entities.Person;
-import hse.projects.taskone.serializers.AnimalSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonDeserializer extends Separator implements Deserializer<Person> {
+public class PersonDeserializer extends JsonArraySplitter implements Deserializer<Person> {
     @Override
     public Person fromJson(String str) {
         AnimalDeserializer ad = new AnimalDeserializer();

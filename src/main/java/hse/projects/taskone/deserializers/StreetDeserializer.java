@@ -1,13 +1,11 @@
 package hse.projects.taskone.deserializers;
 
-import hse.projects.taskone.entities.Building;
 import hse.projects.taskone.entities.Street;
-import hse.projects.taskone.serializers.BuildingSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StreetDeserializer extends Separator implements Deserializer<Street> {
+public class StreetDeserializer extends JsonArraySplitter implements Deserializer<Street> {
     @Override
     public Street fromJson(String str) {
         BuildingDeserializer bd = new BuildingDeserializer();
