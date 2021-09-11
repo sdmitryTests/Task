@@ -50,7 +50,9 @@ public class Main {
         s.AddBuilding(b);
         s.AddBuilding(b2);
         /*                                 */
-        String str = ss.toJson(s);
-        System.out.println(sd.fromJson(str));
+        //String str = ss.toJson(s);
+        Animal testAnimal = new Animal.Builder()
+                .withName("111").withType("Cat").build();
+        System.out.println(testAnimal);
     }
 }

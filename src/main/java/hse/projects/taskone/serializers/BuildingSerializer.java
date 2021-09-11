@@ -1,21 +1,18 @@
 package hse.projects.taskone.serializers;
 
-import hse.projects.taskone.entities.Aparts;
 import hse.projects.taskone.entities.Building;
-import hse.projects.taskone.entities.Person;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BuildingSerializer implements Serializer<Building> {
     @Override
-    public String toJson(Building obj) {
+    public String toJson(Building building) {
         ApartSerializer as = new ApartSerializer();
         StringBuilder val = new StringBuilder();
-        val.append("{\"number\":" + obj.getNumber() + ",\"aparts\":[");
-        if (obj.getAparts().size() > 0) {
-            for (int i = 0; i < obj.getAparts().size(); i++) {
-                val.append(as.toJson(obj.getAparts().get(i)) + ",");
+        val.append("{\"number\":").append(building.getNumber()).append(",\"aparts\":[");
+        if (building.getAparts().size() > 0) {
+            for (int i = 0; i < building.getAparts().size(); i++) {
+                val.append(as.toJson(building.getAparts().get(i))).append(",");
             }
             val.deleteCharAt(val.length() - 1);
         }
@@ -24,9 +21,9 @@ public class BuildingSerializer implements Serializer<Building> {
     }
 
     @Override
-    public String toJsonList(List<Building> lstObj) {
+    public String toJsonList(List<Building> buildingList) {
         StringBuilder val = new StringBuilder("[");
-        for (Building building : lstObj) {
+        for (Building building : buildingList) {
             val.append(this.toJson(building));
             val.append(",");
         }

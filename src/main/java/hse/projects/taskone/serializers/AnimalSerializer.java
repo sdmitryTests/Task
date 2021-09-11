@@ -6,14 +6,14 @@ import java.util.List;
 
 public class AnimalSerializer implements Serializer<Animal> {
     @Override
-    public String toJson(Animal obj) {
-        return "{\"name\":\"" + obj.getName() + "\",\"type\":\"" + obj.getType() + "\"}";
+    public String toJson(Animal animal) {
+        return "{\"name\":\"" + animal.getName() + "\",\"type\":\"" + animal.getType() + "\"}";
     }
 
     @Override
-    public String toJsonList(List<Animal> lstObj) {
+    public String toJsonList(List<Animal> animalList) {
         StringBuilder val = new StringBuilder("[");
-        for (Animal animal : lstObj) {
+        for (Animal animal : animalList) {
             val.append(this.toJson(animal));
             val.append(",");
         }

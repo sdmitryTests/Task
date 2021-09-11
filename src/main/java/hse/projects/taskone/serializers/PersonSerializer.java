@@ -1,21 +1,20 @@
 package hse.projects.taskone.serializers;
 
-import hse.projects.taskone.entities.Animal;
 import hse.projects.taskone.entities.Person;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PersonSerializer implements Serializer<Person> {
     @Override
-    public String toJson(Person obj) {
+    public String toJson(Person person) {
         AnimalSerializer as = new AnimalSerializer();
         StringBuilder val = new StringBuilder();
-        val.append("{\"firstName\":\"" + obj.getFirstName() + "\"," + "\"lastName\":\"" + obj.getLastName() + "\"," +
-                "\"money\":" + obj.getMoney() + "," + "\"pets\":[");
-        if (obj.getPets().size() > 0) {
-            for (int i = 0; i < obj.getPets().size(); i++) {
-                val.append(as.toJson(obj.getPets().get(i)) + ",");
+        val.append("{\"firstName\":\"").append(person.getFirstName()).append("\",").append("\"lastName\":\"");
+        val.append(person.getLastName()).append("\",").append("\"money\":");
+        val.append(person.getMoney()).append(",").append("\"pets\":[");
+        if (person.getPets().size() > 0) {
+            for (int i = 0; i < person.getPets().size(); i++) {
+                val.append(as.toJson(person.getPets().get(i))).append(",");
             }
             val.deleteCharAt(val.length() - 1);
         }
@@ -24,9 +23,9 @@ public class PersonSerializer implements Serializer<Person> {
     }
 
     @Override
-    public String toJsonList(List<Person> lstObj) {
+    public String toJsonList(List<Person> personList) {
         StringBuilder val = new StringBuilder("[");
-        for (Person person : lstObj) {
+        for (Person person : personList) {
             val.append(this.toJson(person));
             val.append(",");
         }
