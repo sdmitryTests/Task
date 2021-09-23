@@ -4,45 +4,28 @@ import java.util.Locale;
 
 public class Animal {
 
-    private String name;
-    private Type type = null;
-
-    public Animal(String name) {
-        this.name = name;
-    }
-
-    public Animal() {}
-
-    public boolean setType(String anType) {
-        for (Type o : Type.values()) {
-            if (o.toString().equals(anType.toLowerCase(Locale.ROOT))) {
-                this.type = o;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public String getType() {
-        if (type != null) {
-            return this.type.toString();
-        } else return "Err";
-    }
-
-    public enum Type {
-        UNKNOWN, DOG, CAT, TURTLE, HAMSTER;
+    private enum Type {
+        DOG, CAT, TURTLE, HAMSTER;
 
         public String toString() {
             return this.name().toLowerCase(Locale.ROOT);
         }
     }
 
-    public String getName() {
-        return name;
+    private final String name;
+    private final Type type;
+
+    private Animal(String name, Type type) {
+        this.name = name;
+        this.type = type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getType() {
+        return type.toString();
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -51,30 +34,21 @@ public class Animal {
     }
 
     public static class Builder {
-        private Animal animal;
-
-        public Builder() {
-            animal = new Animal();
-        }
+        private String name;
+        private Type type;
 
         public Builder withName(String name) {
-            animal.name = name;
+            this.name = name;
             return this;
         }
 
         public Builder withType(String type) {
-            for (Type t : Type.values()) {
-                if (t.toString().equals(type.toLowerCase(Locale.ROOT))) {
-                    animal.type = t;
-                    return this;
-                }
-            }
-            animal.type = Type.UNKNOWN;
+            this.type = Type.valueOf(type.toUpperCase(Locale.ROOT));
             return this;
         }
 
         public Animal build() {
-            return this.animal;
+            return new Animal(name, type);
         }
     }
 }

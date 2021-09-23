@@ -10,10 +10,10 @@ public class AnimalDeserializer extends Separator implements Deserializer<Animal
     public Animal fromJson(String str) {
         StringBuilder sb = new StringBuilder(str);
         sb.delete(0, sb.indexOf(":") + 2); // обрезаем до первого значения (name)
-        Animal tmp = new Animal(sb.substring(0, sb.indexOf("\""))); // записываем значение
+        String name = sb.substring(0, sb.indexOf("\"")); // записываем значение
         sb.delete(0, sb.indexOf(":") + 2); //обрезаем до второго значения (type)
-        tmp.setType(sb.substring(0, sb.indexOf("\"")));
-        return tmp;
+        String type = sb.substring(0, sb.indexOf("\""));
+        return new Animal.Builder().withName(name).withType(type).build();
     }
 
     @Override
@@ -25,5 +25,4 @@ public class AnimalDeserializer extends Separator implements Deserializer<Animal
         }
         return animalList;
     }
-
 }

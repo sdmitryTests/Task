@@ -15,9 +15,8 @@ public class BuildingDeserializer extends Separator implements Deserializer<Buil
         sb.delete(0, sb.indexOf(":") + 1); //обрезаем до первого значения (number)
         int number = Integer.parseInt(sb.substring(0, sb.indexOf(","))); // записываем значение
         sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка квартир
-        Building tmpB = new Building(number);
-        tmpB.setAparts(ad.fromJsonList(sb.toString()));
-        return tmpB;
+        List<Aparts> deserializedAparts = ad.fromJsonList(sb.toString());
+        return new Building.Builder().withNumber(number).withAparts(deserializedAparts).build();
     }
 
     @Override

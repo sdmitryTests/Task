@@ -3,11 +3,12 @@ package hse.projects.taskone.entities;
 import java.util.*;
 
 public class Street {
-    private String streetName;
-    private List<Building> buildings = new ArrayList<>();
+    private final String streetName;
+    private final List<Building> buildings;
 
-    public Street(String streetName) {
+    public Street(String streetName, List<Building> buildings) {
         this.streetName = streetName;
+        this.buildings = buildings;
     }
 
     public String getStreetName() {
@@ -18,17 +19,28 @@ public class Street {
         return buildings;
     }
 
-    public void setBuildings(List<Building> buildings) {
-        this.buildings = buildings;
-    }
-
-    public void AddBuilding(Building b) {
-        this.buildings.add(b);
-    }
-
     @Override
     public String toString() {
         return "\nУлица " + streetName +
                 "\nДома: " + buildings;
+    }
+
+    public static class Builder {
+        private String streetName;
+        private List<Building> buildings;
+
+        public Builder withName(String name) {
+            this.streetName = name;
+            return this;
+        }
+
+        public Builder withBuildings(List<Building> buildings) {
+            this.buildings = buildings;
+            return this;
+        }
+
+        public Street build() {
+            return new Street(streetName, buildings);
+        }
     }
 }

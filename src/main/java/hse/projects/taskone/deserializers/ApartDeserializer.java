@@ -15,9 +15,8 @@ public class ApartDeserializer extends Separator implements Deserializer<Aparts>
         sb.delete(0, sb.indexOf(":") + 1); //обрезаем до первого значения (number)
         int number = Integer.parseInt(sb.substring(0, sb.indexOf(","))); // записываем значение
         sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка жителей
-        Aparts tmpA = new Aparts(number);
-        tmpA.setResidents(pd.fromJsonList(sb.toString()));
-        return tmpA;
+        List<Person> serializedResidents = pd.fromJsonList(sb.toString());
+        return new Aparts.Builder().withNumber(number).withResidents(serializedResidents).build();
     }
 
     @Override

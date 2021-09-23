@@ -15,9 +15,8 @@ public class StreetDeserializer extends Separator implements Deserializer<Street
         sb.delete(0, sb.indexOf(":") + 2); //обрезаем до первого значения (streetName)
         String streetName = sb.substring(0, sb.indexOf("\"")); // записываем значение
         sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка домов
-        Street tmpS = new Street(streetName);
-        tmpS.setBuildings(bd.fromJsonList(sb.toString()));
-        return tmpS;
+        List<Building> deserializedBuildings = bd.fromJsonList(sb.toString());
+        return new Street.Builder().withName(streetName).withBuildings(deserializedBuildings).build();
     }
 
     @Override
