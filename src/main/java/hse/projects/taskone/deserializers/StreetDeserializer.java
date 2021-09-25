@@ -1,32 +1,42 @@
 package hse.projects.taskone.deserializers;
 
+import hse.projects.taskone.entities.Aparts;
 import hse.projects.taskone.entities.Building;
 import hse.projects.taskone.entities.Street;
 import hse.projects.taskone.serializers.BuildingSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class StreetDeserializer extends Separator implements Deserializer<Street> {
     @Override
     public Street fromJson(String str) {
-        BuildingDeserializer bd = new BuildingDeserializer();
-        StringBuilder sb = new StringBuilder(str);
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до первого значения (streetName)
-        String streetName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка домов
-        List<Building> deserializedBuildings = bd.fromJsonList(sb.toString());
-        return new Street.Builder().withName(streetName).withBuildings(deserializedBuildings).build();
+        BuildingDeserializer buildingDeserializer = new BuildingDeserializer();
+        String streetName = "";
+        List<Building> buildings = null;
+        JsonObjectMapper streetMapper = new JsonObjectMapper();
+        Map<String, String> streetJsonMapped = streetMapper.jsonObjectToMap(str);
+        for (String key : streetJsonMapped.keySet()){
+            switch (key) {
+                case "streetName" -> streetName = streetJsonMapped.get(key);
+                case "buildings" -> buildings = buildingDeserializer.fromJsonList(streetJsonMapped.get(key));
+            }
+        }
+        if (buildings == null || streetName.length() == 0) {
+            throw new IllegalStateException("Not enough fields");
+        }
+        return new Street.Builder().withName(streetName).withBuildings(buildings).build();
     }
 
     @Override
     public List<Street> fromJsonList(String str) {
-        List<Street> streetsList = new ArrayList<>();
-        List<String> strLst = this.toStringList(str);
+        JsonArraySplitter streetSplitter = new JsonArraySplitter(str);
+        List<Street> splittedStreets = new ArrayList<>();
+        List<String> strLst = streetSplitter.splitJsonArray();
         for (String string : strLst) {
-            streetsList.add(this.fromJson(string));
+            splittedStreets.add(this.fromJson(string));
         }
-        return streetsList;
+        return splittedStreets;
     }
-
 }

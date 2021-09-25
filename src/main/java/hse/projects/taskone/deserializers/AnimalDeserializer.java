@@ -4,22 +4,32 @@ import hse.projects.taskone.entities.Animal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class AnimalDeserializer extends Separator implements Deserializer<Animal> {
+public class AnimalDeserializer implements Deserializer<Animal> {
     @Override
     public Animal fromJson(String str) {
-        StringBuilder sb = new StringBuilder(str);
-        sb.delete(0, sb.indexOf(":") + 2); // обрезаем до первого значения (name)
-        String name = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до второго значения (type)
-        String type = sb.substring(0, sb.indexOf("\""));
+        String name = null;
+        String type = null;
+        JsonObjectMapper animalMapper = new JsonObjectMapper();
+        Map<String, String> animalJsonMapped = animalMapper.jsonObjectToMap(str);
+        for (String key : animalJsonMapped.keySet()){
+            switch (key) {
+                case "name" -> name = animalJsonMapped.get(key);
+                case "type" -> type = animalJsonMapped.get(key);
+            }
+        }
+        if (type == null || name == null) {
+            throw new IllegalStateException("Not enough fields");
+        }
         return new Animal.Builder().withName(name).withType(type).build();
     }
 
     @Override
     public List<Animal> fromJsonList(String str) {
+        JsonArraySplitter animalSplitter = new JsonArraySplitter(str);
         List<Animal> animalList = new ArrayList<>();
-        List<String> strLst = this.toStringList(str);
+        List<String> strLst = animalSplitter.splitJsonArray();
         for (String string : strLst) {
             animalList.add(this.fromJson(string));
         }

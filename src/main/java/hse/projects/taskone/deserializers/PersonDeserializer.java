@@ -6,31 +6,41 @@ import hse.projects.taskone.serializers.AnimalSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class PersonDeserializer extends Separator implements Deserializer<Person> {
+public class PersonDeserializer implements Deserializer<Person> {
     @Override
     public Person fromJson(String str) {
         AnimalDeserializer animalDeserializer = new AnimalDeserializer();
-        StringBuilder sb = new StringBuilder(str);
-        sb.delete(0, sb.indexOf(":") + 2); // обрезаем до первого значения (firstName)
-        String firstName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 2); //обрезаем до второго значения (lastName)
-        String lastName = sb.substring(0, sb.indexOf("\"")); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до третьего значения (money)
-        int money = Integer.parseInt(sb.substring(0, sb.indexOf("p") - 2)); // записываем значение
-        sb.delete(0, sb.indexOf(":") + 1); //обрезаем до списка питомцев
-        List<Animal> serializedPets = animalDeserializer.fromJsonList(sb.toString());
+        String firstName = null;
+        String lastName = null;
+        int money = -1;
+        List<Animal> pets = null;
+        JsonObjectMapper personMapper = new JsonObjectMapper();
+        Map<String, String> personJsonMapped = personMapper.jsonObjectToMap(str);
+        for (String key : personJsonMapped.keySet()){
+            switch (key) {
+                case "firstName" -> firstName = personJsonMapped.get(key);
+                case "lastName" -> lastName = personJsonMapped.get(key);
+                case "money" -> money = Integer.parseInt(personJsonMapped.get(key));
+                case "pets" -> pets = animalDeserializer.fromJsonList(personJsonMapped.get(key));
+            }
+        }
+        if (firstName == null || lastName == null || money == -1 || pets == null) {
+            throw new IllegalStateException("Not enough fields");
+        }
         return new Person.Builder().withFirstName(firstName).withLastName(lastName)
-                .withMoney(money).withPets(serializedPets).build();
+                .withMoney(money).withPets(pets).build();
     }
 
     @Override
     public List<Person> fromJsonList(String str) {
-        List<Person> personList = new ArrayList<>();
-        List<String> strLst = this.toStringList(str);
+        JsonArraySplitter personSplitter = new JsonArraySplitter(str);
+        List<Person> splittedResidents = new ArrayList<>();
+        List<String> strLst = personSplitter.splitJsonArray();
         for (String string : strLst) {
-            personList.add(this.fromJson(string));
+            splittedResidents.add(this.fromJson(string));
         }
-        return personList;
+        return splittedResidents;
     }
 }

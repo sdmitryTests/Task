@@ -5,9 +5,7 @@ import hse.projects.taskone.entities.*;
 import hse.projects.taskone.serializers.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
@@ -51,6 +49,8 @@ public class Main {
         buildings1.add(b2);
         //
         Street street1 = new Street.Builder().withName("Komarova").withBuildings(buildings1).build();
+        List<Street> streets1 = new ArrayList<>();
+        streets1.add(street1);
         //
         AnimalSerializer ans = new AnimalSerializer();
         AnimalDeserializer and = new AnimalDeserializer();
@@ -63,9 +63,6 @@ public class Main {
         StreetSerializer ss = new StreetSerializer();
         StreetDeserializer sd = new StreetDeserializer();
         /*                                 */
-        JsonObjectMapper jsonObjectMapper = new JsonObjectMapper();
-        Map<String,String> map = jsonObjectMapper.jsonObjectToMap(ps.toJson(p1));
-        System.out.println(ps.toJson(p1));
-        System.out.println(map);
+        System.out.println(sd.fromJsonList(ss.toJsonList(streets1)));
     }
 }
