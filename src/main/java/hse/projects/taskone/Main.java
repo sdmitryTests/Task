@@ -1,9 +1,11 @@
 package hse.projects.taskone;
 
+import hse.projects.taskone.IO.FileIO;
 import hse.projects.taskone.deserializers.*;
 import hse.projects.taskone.entities.*;
 import hse.projects.taskone.serializers.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,12 @@ public class Main {
         StreetSerializer ss = new StreetSerializer();
         StreetDeserializer sd = new StreetDeserializer();
         /*                                 */
-        System.out.println(sd.fromJsonList(ss.toJsonList(streets1)));
+        //System.out.println(sd.fromJsonList(ss.toJsonList(streets1)));
+        FileIO fio = new FileIO();
+        try {
+            System.out.println(fio.read("streets.txt"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

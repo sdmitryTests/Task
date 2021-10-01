@@ -1,20 +1,31 @@
 package hse.projects.taskone.IO;
 
-import hse.projects.taskone.entities.Animal;
 import hse.projects.taskone.entities.Street;
+import hse.projects.taskone.serializers.StreetSerializer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class FileIO {
-    public void Write(Street street) {
+    public void write(String filePath, Street street, boolean append) {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("streets.txt");
+            StreetSerializer streetSerializer = new StreetSerializer();
+            FileOutputStream jsonObjectWriter = new FileOutputStream(filePath, append);
+            jsonObjectWriter.write(streetSerializer.toJson(street).getBytes());
+            jsonObjectWriter.write("\n".getBytes());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("File error: cannot write an object in the file");
         }
+    }
 
+    public String read(String filePath) throws Exception {
+        StringBuilder jsonObject = new StringBuilder();
+        File file = new File(filePath);
+        FileInputStream jsonObjectReader = new FileInputStream(file);
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(jsonObjectReader, 200);
+        int ch;
+        while ((ch=bufferedInputStream.read()) != -1) {
+            jsonObject.append((char)ch);
+        }
+        return jsonObject.toString().replaceAll("\n", "");
     }
 }
