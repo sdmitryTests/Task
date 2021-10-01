@@ -1,9 +1,11 @@
 package hse.projects.taskone.IO;
 
+import hse.projects.taskone.deserializers.StreetDeserializer;
 import hse.projects.taskone.entities.Street;
 import hse.projects.taskone.serializers.StreetSerializer;
 
 import java.io.*;
+import java.util.List;
 
 public class FileIO {
     public void write(String filePath, Street street, boolean append) {
@@ -17,7 +19,8 @@ public class FileIO {
         }
     }
 
-    public String read(String filePath) throws Exception {
+    public List<Street> read(String filePath) throws Exception {
+        StreetDeserializer streetDeserializer = new StreetDeserializer();
         StringBuilder jsonObject = new StringBuilder();
         File file = new File(filePath);
         FileInputStream jsonObjectReader = new FileInputStream(file);
@@ -26,6 +29,6 @@ public class FileIO {
         while ((ch=bufferedInputStream.read()) != -1) {
             jsonObject.append((char)ch);
         }
-        return jsonObject.toString().replaceAll("\n", "");
+        return streetDeserializer.fromJsonList(jsonObject.toString().replaceAll("\n", ""));
     }
 }
