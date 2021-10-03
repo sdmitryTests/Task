@@ -21,8 +21,10 @@ public class Street {
 
     @Override
     public String toString() {
-        return "\nУлица " + streetName +
-                "\nДома: " + buildings;
+        return ("\nУлица " + streetName +
+                "\nДома: " + buildings)
+                .replaceAll("\\[", "")
+                .replaceAll("]", "");
     }
 
     public static class Builder {

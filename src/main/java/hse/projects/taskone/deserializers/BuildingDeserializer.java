@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class BuildingDeserializer extends Separator implements Deserializer<Building> {
+public class BuildingDeserializer implements Deserializer<Building> {
     @Override
     public Building fromJson(String str) {
         ApartDeserializer apartDeserializer = new ApartDeserializer();
