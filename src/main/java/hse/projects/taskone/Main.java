@@ -1,6 +1,6 @@
 package hse.projects.taskone;
 
-import hse.projects.taskone.IO.*;
+import hse.projects.taskone.consoleApp.ConsoleApplication;
 import hse.projects.taskone.deserializers.*;
 import hse.projects.taskone.entities.*;
 import hse.projects.taskone.serializers.*;
@@ -72,7 +72,9 @@ public class Main {
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());
 //        }
-        StreetInput consoleIO = new StreetInput(new Scanner(System.in));
-        System.out.println(consoleIO.readStreets().toString());
+//        StreetInput consoleIO = new StreetInput(new Scanner(System.in));
+//        System.out.println(consoleIO.readStreets().toString());
+        ConsoleApplication consoleApplication = new ConsoleApplication(new Scanner(System.in));
+        consoleApplication.run();
     }
 }
